@@ -4,10 +4,10 @@ import com.erhn.ftknft.library.core.IRouter
 import com.erhn.ftknft.library.core.NavigatorHolder
 
 
-class BaseRouter(private val stackName: String = "BaseStack") : IRouter {
+open class BaseRouter(stackName: String? = null) : IRouter {
 
     val holder = NavigatorHolder()
-    val stack = Stack(stackName)
+    val stack = Stack(stackName ?: javaClass.simpleName)
     private val listeners = HashMap<Int, ArrayList<IRouter.ResultListener>>()
 
     override fun replaceScreen(screenKey: String, data: Any?) {

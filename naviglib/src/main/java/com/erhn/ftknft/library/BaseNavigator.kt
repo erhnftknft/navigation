@@ -5,14 +5,15 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
 import com.erhn.ftknft.library.core.INavigator
+import com.erhn.ftknft.library.core.Screen
 
 abstract class BaseNavigator(protected val manager: FragmentManager, @IdRes val container: Int) :
     INavigator {
 
 
-    override open fun replace(screenKey: String, data: Any?) {
+    override open fun replace(screen: Screen) {
         manager.beginTransaction()
-            .replace(container, createFragment(screenKey, data), screenKey)
+            .replace(container, screen.instance, screen.screenTag)
             .addTransactionSetting(Command.REPLACE)
             .commit()
     }
@@ -21,10 +22,10 @@ abstract class BaseNavigator(protected val manager: FragmentManager, @IdRes val 
         return fragmentTransaction
     }
 
-    override open fun forward(screenKey: String, data: Any?) {
-        val forwardTransaction = manager.beginTransaction()
-            .addToBackStack(screenKey)
-            .replace(container, createFragment(screenKey, data), screenKey)
+    override open fun forward(screen: Screen) {
+        manager.beginTransaction()
+            .addToBackStack(screen.screenTag)
+            .replace(container, screen.instance, screen.screenTag)
             .addTransactionSetting(Command.FORWARD)
             .commit()
     }
@@ -37,9 +38,9 @@ abstract class BaseNavigator(protected val manager: FragmentManager, @IdRes val 
         manager.popBackStack()
     }
 
-    override open fun backTo(screenKey: String?) {
-        if (screenKey != null) {
-            manager.popBackStack(screenKey, 0)
+    override open fun backTo(screenTag: String?) {
+        if (screenTag != null) {
+            manager.popBackStack(screenTag, 0)
         } else {
             val count = manager.backStackEntryCount
             for (i in 0 until count) {
@@ -48,8 +49,6 @@ abstract class BaseNavigator(protected val manager: FragmentManager, @IdRes val 
         }
     }
 
-
-    abstract fun createFragment(screenKey: String, data: Any?): Fragment
 
     private enum class Command {
         FORWARD, REPLACE

@@ -2,6 +2,7 @@ package com.erhn.ftknft.library
 
 import com.erhn.ftknft.library.core.IRouter
 import com.erhn.ftknft.library.core.NavigatorHolder
+import com.erhn.ftknft.library.core.Screen
 
 
 open class BaseRouter(stackName: String? = null) : IRouter {
@@ -10,18 +11,18 @@ open class BaseRouter(stackName: String? = null) : IRouter {
     val stack = Stack(stackName ?: javaClass.simpleName)
     private val listeners = HashMap<Int, ArrayList<IRouter.ResultListener>>()
 
-    override fun replaceScreen(screenKey: String, data: Any?) {
+    override fun replaceScreen(screen: Screen) {
         holder.navigator?.apply {
-            replace(screenKey, data)
+            replace(screen)
             stack.pop()
-            stack.push(screenKey)
+            stack.push(screen.screenTag)
         }
     }
 
-    override fun navigateTo(screenKey: String, data: Any?) {
+    override fun navigateTo(screen: Screen) {
         holder.navigator?.apply {
-            forward(screenKey, data)
-            stack.push(screenKey)
+            forward(screen)
+            stack.push(screen.screenTag)
         }
     }
 
@@ -50,13 +51,13 @@ open class BaseRouter(stackName: String? = null) : IRouter {
 
     }
 
-    override fun newRootScreen(screenKey: String, data: Any?) {
+    override fun newRootScreen(screen: Screen) {
         holder.navigator?.apply {
             backTo(null)
             stack.clear()
-            replace(screenKey, data)
+            replace(screen)
             stack.pop()
-            stack.push(screenKey)
+            stack.push(screen.screenTag)
         }
     }
 

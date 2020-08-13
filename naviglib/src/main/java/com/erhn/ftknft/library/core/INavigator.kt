@@ -1,8 +1,8 @@
 package com.erhn.ftknft.library.core
 
 interface INavigator {
-    fun replace(screenKey: String, data: Any? = null)
-    fun forward(screenKey: String, data: Any? = null)
+    fun replace(screen: Screen)
+    fun forward(screen: Screen)
     fun back()
-    fun backTo(screenKey: String?)
+    fun backTo(screenTag: String?)
 }

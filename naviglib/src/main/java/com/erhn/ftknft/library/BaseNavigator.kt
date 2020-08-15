@@ -13,7 +13,7 @@ abstract class BaseNavigator(protected val manager: FragmentManager, @IdRes val 
 
     override open fun replace(screen: Screen) {
         manager.beginTransaction()
-            .replace(container, screen.instance, screen.screenTag)
+            .replace(container, screen.createFragment(), screen.screenTag)
             .addTransactionSetting(Command.REPLACE)
             .commit()
     }
@@ -25,7 +25,7 @@ abstract class BaseNavigator(protected val manager: FragmentManager, @IdRes val 
     override open fun forward(screen: Screen) {
         manager.beginTransaction()
             .addToBackStack(screen.screenTag)
-            .replace(container, screen.instance, screen.screenTag)
+            .replace(container, screen.createFragment(), screen.screenTag)
             .addTransactionSetting(Command.FORWARD)
             .commit()
     }

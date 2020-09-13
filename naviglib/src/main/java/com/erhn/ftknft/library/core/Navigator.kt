@@ -1,6 +1,6 @@
 package com.erhn.ftknft.library.core
 
-interface INavigator {
+interface Navigator {
     fun replace(screen: Screen)
     fun forward(screen: Screen)
     fun back()

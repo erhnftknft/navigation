@@ -11,6 +11,7 @@ open class BaseNavigator(protected val manager: FragmentManager, @IdRes val cont
 
 
     override open fun replace(screen: Screen) {
+        manager.executePendingTransactions()
         manager.beginTransaction()
             .replace(container, screen.createFragment(), screen.screenTag)
             .addTransactionSetting(Command.REPLACE)
@@ -22,6 +23,7 @@ open class BaseNavigator(protected val manager: FragmentManager, @IdRes val cont
     }
 
     override open fun forward(screen: Screen) {
+        manager.executePendingTransactions()
         manager.beginTransaction()
             .addToBackStack(screen.screenTag)
             .replace(container, screen.createFragment(), screen.screenTag)
@@ -34,10 +36,12 @@ open class BaseNavigator(protected val manager: FragmentManager, @IdRes val cont
     }
 
     override open fun back() {
+        manager.executePendingTransactions()
         manager.popBackStack()
     }
 
     override open fun backTo(screenTag: String?) {
+        manager.executePendingTransactions()
         if (screenTag != null) {
             manager.popBackStack(screenTag, 0)
         } else {

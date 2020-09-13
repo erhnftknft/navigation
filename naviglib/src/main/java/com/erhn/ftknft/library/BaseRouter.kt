@@ -27,10 +27,14 @@ open class BaseRouter(stackName: String? = null) : Router {
 
     override fun backTo(screenKey: String) {
         holder.navigator?.let { n ->
-            backTo(screenKey)
+            n.backTo(screenKey)
             stack.popTo(screenKey)
         }
+    }
 
+    override fun backToAndReplace(backToScreenKey: String, newScreen: Screen) {
+        backTo(backToScreenKey)
+        replaceScreen(newScreen)
     }
 
     override fun back(count: Int) {
@@ -72,7 +76,13 @@ open class BaseRouter(stackName: String? = null) : Router {
         holder.navigator?.let { n ->
             n.backTo(null)
             stack.clear()
-            newChain(*screens)
+            for (screen in screens) {
+                if (screens.indexOf(screen) == 0) {
+                    replaceScreen(screen)
+                } else {
+                    navigateTo(screen)
+                }
+            }
         }
     }
 }

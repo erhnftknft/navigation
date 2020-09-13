@@ -4,6 +4,7 @@ interface Router {
     fun replaceScreen(screen: Screen)
     fun navigateTo(screen: Screen)
     fun backTo(screenKey: String)
+    fun backToAndReplace(backToScreenKey: String, newScreen: Screen)
     fun back(count: Int)
     fun exit()
     fun newRootScreen(screen: Screen)

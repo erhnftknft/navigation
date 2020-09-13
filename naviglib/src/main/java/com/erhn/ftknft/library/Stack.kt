@@ -7,11 +7,17 @@ class Stack(val stackName: String) {
 
     private val screensKeys = LinkedList<String>()
 
+    private var changeListener: ((String) -> Unit)? = null
+
+    fun setOnChangeListener(listener: (stringStack: String) -> Unit) {
+        changeListener = listener
+    }
 
     fun push(screenKey: String) {
         screensKeys.add(screenKey)
         log("Push $screenKey")
         log(toString())
+        changeListener?.invoke(toString())
     }
 
     fun pop() {
@@ -19,6 +25,7 @@ class Stack(val stackName: String) {
             val removed = screensKeys.removeLast()
             log("Pop $removed")
             log(toString())
+            changeListener?.invoke(toString())
         }
     }
 
@@ -27,10 +34,11 @@ class Stack(val stackName: String) {
         var isNotRemoved = true
         while (isNotRemoved) {
             val last = screensKeys.last
-            if (last== screenKey) {
+            if (last == screenKey) {
                 isNotRemoved = false
             } else {
                 screensKeys.removeLast()
+                changeListener?.invoke(toString())
                 log("Pop $last")
             }
         }
@@ -39,6 +47,7 @@ class Stack(val stackName: String) {
 
     fun clear() {
         screensKeys.clear()
+        changeListener?.invoke(toString())
         log("Clear")
         log(toString())
     }
